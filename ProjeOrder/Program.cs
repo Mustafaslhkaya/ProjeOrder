@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 
@@ -90,8 +91,31 @@ namespace ProjeOrder
                 dataStream.Close();
 
             }
+            HttpWebRequest requestOrder2 = (HttpWebRequest)HttpWebRequest.Create("https://localhost:44325/weatherforecast/GetOrders");
+            requestOrder2.Method = "GET";
+            String testOrder2 = String.Empty;
+            using (HttpWebResponse responseOrder2 = (HttpWebResponse)requestOrder2.GetResponse())
+            {
+                Stream dataStream = responseOrder2.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                testOrder2 = reader.ReadToEnd();
+                reader.Close();
+                dataStream.Close();
 
-            HttpWebRequest requestOrderDetails = (HttpWebRequest)HttpWebRequest.Create("https://localhost:44325/weatherforecast/AddOrderDetails?orderid=" + orderId + "&employeeid=" + EmployeeId + "&shipperid=" + shipperId);
+            }
+
+            Console.WriteLine(testOrder2.Max());
+            Console.Write("OrderId:");
+            var orderid = Console.ReadLine();
+            Console.Write("UnitPrice:");
+            var unitprice=Console.ReadLine();
+            Console.Write("Quantity:");
+            var quantity=Console.ReadLine();
+            Console.Write("Discount:");
+            var discount = Console.ReadLine();
+
+
+            HttpWebRequest requestOrderDetails = (HttpWebRequest)HttpWebRequest.Create("https://localhost:44325/weatherforecast/AddOrderDetails?orderid=" + orderid + "&productid=" + ProductId + "&unitprice=" + unitprice + "&quantity=" + quantity + "&discount=" + discount);
             requestOrderDetails.Method = "POST";
             String testOrderDetails = String.Empty;
             using (HttpWebResponse responseOrderDetails = (HttpWebResponse)requestOrderDetails.GetResponse())
@@ -103,6 +127,7 @@ namespace ProjeOrder
                 dataStream.Close();
 
             }
+
         }
     }
 }
