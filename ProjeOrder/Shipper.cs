@@ -4,10 +4,8 @@ using System.Text;
 
 namespace ProjeOrder
 {
-    public class Employees
+    public class Shipper
     {
-        public int EmployeeId { get; set; }
-        
-
+        public int ShipperId { get; set; }
     }
 }

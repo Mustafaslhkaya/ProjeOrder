@@ -22,25 +22,35 @@ namespace ProjeOrder
                 reader.Close();
                 dataStream.Close();
             }
-
-            Console.WriteLine(testCustomer);
+            var CustomerList = JsonSerializer.Deserialize<List<Customers>>(testCustomer, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            
+            foreach (Customers item in CustomerList)
+            {
+                Console.WriteLine("CustomerId:"+item.CustomerId);
+            }
+            Console.WriteLine("");
             Console.Write("CustomerId:");
             string customerId = Console.ReadLine();
 
-            HttpWebRequest request2 = (HttpWebRequest)HttpWebRequest.Create("https://localhost:44325/weatherforecast/GetEmployees");
-            request2.Method = "GET";
+            HttpWebRequest requestEmployee = (HttpWebRequest)HttpWebRequest.Create("https://localhost:44325/weatherforecast/GetEmployees");
+            requestEmployee.Method = "GET";
             String testEmployee = String.Empty;
-            using (HttpWebResponse response2 = (HttpWebResponse)request2.GetResponse())
+            using (HttpWebResponse responseEmployee = (HttpWebResponse)requestEmployee.GetResponse())
             {
-                Stream dataStream = response2.GetResponseStream();
+                Stream dataStream = responseEmployee.GetResponseStream();
                 StreamReader reader = new StreamReader(dataStream);
                 testEmployee = reader.ReadToEnd();
                 reader.Close();
                 dataStream.Close();
                 
             }
-
-            Console.WriteLine(testEmployee);
+            var EmployeeList = JsonSerializer.Deserialize<List<Employees>>(testEmployee, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            
+            foreach (Employees item in EmployeeList)
+            {
+                Console.WriteLine("EmployeeId:"+item.EmployeeId);
+            }
+            Console.WriteLine("");
             Console.Write("EmployeeId:");
             string EmployeeId = Console.ReadLine();
 
@@ -56,10 +66,24 @@ namespace ProjeOrder
                 dataStream.Close();
 
             }
+            var ProductList = JsonSerializer.Deserialize<List<Product>>(testProduct, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            Console.WriteLine(testProduct);
+            foreach (Product item in ProductList)
+            {
+                Console.WriteLine("ProductId:"+item.ProductId);
+                Console.WriteLine("UnitPrice:"+item.UnitPrice);
+            }
+            Console.WriteLine("");
             Console.Write("ProductId:");
-            string ProductId = Console.ReadLine();
+            var ProductId =Convert.ToInt32(Console.ReadLine());
+            decimal unitprice = 0;
+            foreach (Product item in ProductList)
+            {
+                if (item.ProductId==ProductId)
+                {
+                    unitprice = item.UnitPrice;
+                }
+            }
 
             HttpWebRequest requestShipper = (HttpWebRequest)HttpWebRequest.Create("https://localhost:44325/weatherforecast/GetShippers");
             requestShipper.Method = "GET";
@@ -73,8 +97,15 @@ namespace ProjeOrder
                 dataStream.Close();
 
             }
+            var ShipperList = JsonSerializer.Deserialize<List<Shipper>>(testShipper, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            Console.WriteLine(testShipper);
+            foreach (Shipper item in ShipperList)
+            {
+                Console.WriteLine("ShipperId:" + item.ShipperId);
+            }
+            Console.WriteLine("");
+
+
             Console.Write("ShipperId:");
             string shipperId = Console.ReadLine();
 
@@ -103,12 +134,16 @@ namespace ProjeOrder
                 dataStream.Close();
 
             }
+            var OrderList = JsonSerializer.Deserialize<List<Order>>(testOrder2, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            
+            int orderid=OrderList.Max(a => a.OrderId);
+            Product product = new Product();
+           
 
-            Console.WriteLine(testOrder2.Max());
-            Console.Write("OrderId:");
-            var orderid = Console.ReadLine();
-            Console.Write("UnitPrice:");
-            var unitprice=Console.ReadLine();
+            Console.WriteLine("OrderId:"+orderid);
+            
+            Console.WriteLine("UnitPrice:"+ unitprice);
+            
             Console.Write("Quantity:");
             var quantity=Console.ReadLine();
             Console.Write("Discount:");
